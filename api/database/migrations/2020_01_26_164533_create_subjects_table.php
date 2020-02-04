@@ -1,33 +1,25 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateSubjectsTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
         Schema::create('subjects', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 45);
-            $table->bigInteger('student_id')->unsigned();
-            $table->bigInteger('subject_id')->unsigned();
+            $table->string('name', 45)->unique();
             $table->timestamps();
-            $table->foreign('student_id')->references('id')->on('students');
-            $table->foreign('subject_id')->references('id')->on('subjects');
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {

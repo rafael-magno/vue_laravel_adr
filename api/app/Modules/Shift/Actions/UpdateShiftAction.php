@@ -2,16 +2,23 @@
 
 namespace App\Modules\Shift\Actions;
 
-use App\Entities\Shift;
+use App\Action;
+use App\Modules\Shift\Repositories\ShiftRepository;
 use Illuminate\Http\Request;
-use Lorisleiva\Actions\Action;
 
 class UpdateShiftAction extends Action
 {
-    public function handle(int $id, Request $request)
+    public function rules(int $id)
     {
-        $shift = Shift::find($id);
-        $shift->fill($request->all());
-        return response()->json($shift->save(), 200);
+        return [
+            'name' => 'unique:shifts,name,'.$id,
+        ];
+    }
+
+    public function handle(int $id, ShiftRepository $shiftRepository, Request $request)
+    {
+        $shift = $shiftRepository->update($request->all(), $id);
+
+        return response()->json($shift, 200);
     }
 }

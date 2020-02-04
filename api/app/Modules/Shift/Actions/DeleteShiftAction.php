@@ -2,14 +2,15 @@
 
 namespace App\Modules\Shift\Actions;
 
-use App\Entities\Shift;
-use Lorisleiva\Actions\Action;
+use App\Action;
+use App\Modules\Shift\Repositories\ShiftRepository;
 
 class DeleteShiftAction extends Action
 {
-    public function handle(int $id)
+    public function handle(int $id, ShiftRepository $shiftRepository)
     {
-        Shift::destroy($id);
-        return response()->json('', 204);
+        $shift = $shiftRepository->delete($id);
+
+        return response()->json($shift, 200);
     }
 }

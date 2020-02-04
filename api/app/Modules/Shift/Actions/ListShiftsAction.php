@@ -2,13 +2,15 @@
 
 namespace App\Modules\Shift\Actions;
 
-use App\Entities\Shift;
-use Lorisleiva\Actions\Action;
+use App\Action;
+use App\Modules\Shift\Repositories\ShiftRepository;
 
 class ListShiftsAction extends Action
 {
-    public function handle()
+    public function handle(ShiftRepository $shiftRepository)
     {
-        return response()->json(Shift::all(), 200);
+        $shifts = $shiftRepository->paginate();
+
+        return response()->json($shifts, 200);
     }
 }

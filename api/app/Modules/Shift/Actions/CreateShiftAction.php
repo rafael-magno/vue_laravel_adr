@@ -2,14 +2,25 @@
 
 namespace App\Modules\Shift\Actions;
 
-use App\Entities\Shift;
+use App\Action;
+use App\Modules\Shift\Repositories\ShiftRepository;
 use Illuminate\Http\Request;
-use Lorisleiva\Actions\Action;
 
 class CreateShiftAction extends Action
 {
-    public function handle(Request $request)
+    public function rules()
     {
-        return response()->json(Shift::create($request->all()), 201);
+        return [
+            'name' => 'required|unique:shifts,name',
+        ];
+    }
+
+    public function handle(
+        ShiftRepository $shiftRepository,
+        Request $request
+    ) {
+        $shift = $shiftRepository->create($request->all());
+
+        return response()->json($shift, 201);
     }
 }
