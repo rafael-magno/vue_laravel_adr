@@ -66,7 +66,7 @@ abstract class Repository
         try {
             $model->delete();
         } catch (QueryException $queryException) {
-            throw new HttpResponseException(['O registro possui itens vinculados'], 422, $queryException);
+            throw new HttpResponseException('["The record is linked to another item"]', 422, $queryException);
         }
 
         return $model;
