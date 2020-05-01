@@ -1,19 +1,19 @@
 # Vue Laravel ADR
 ## Instalation
-On the folder api, run: 
+In the api folder, run: 
 ```
 composer install
 ```
-On the folder app, run: 
+In the app folder, run: 
 ```
 npm install
 ```
 ## Usage
-On the folder api, run: 
+In the api folder, run: 
 ```
 composer run serve
 ```
-On the folder app, run: 
+In the app folder, run: 
 ```
 npm run serve
 ```
