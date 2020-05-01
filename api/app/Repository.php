@@ -91,7 +91,7 @@ abstract class Repository
         return $this->findBy($criteria)->first();
     }
 
-    public function paginate(int $perPage = 0): LengthAwarePaginator
+    public function paginate(?int $perPage = null): LengthAwarePaginator
     {
         $perPage = $perPage ?? $_GET['perPage'] ?? env('PER_PAGE_DEFAULT');
 
