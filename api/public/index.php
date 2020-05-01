@@ -9,7 +9,7 @@
 
 define('LARAVEL_START', microtime(true));
 
-$envContent = file('../.env');
+$envContent = file(__DIR__ . '/../.env');
 $env = [];
 foreach ($envContent as $envLine) {
     $envLine = trim($envLine);
@@ -21,6 +21,7 @@ foreach ($envContent as $envLine) {
     unset($envData[0]);
     $env[$keyEnv] = implode('=', $envData);
 }
+
 
 header("Access-Control-Allow-Origin: " . $env['CLIENT_APP_URL']);
 header("Access-Control-Allow-Credentials: true");
