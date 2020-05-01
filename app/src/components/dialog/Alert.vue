@@ -1,6 +1,7 @@
 <template>
   <v-dialog
       v-model="show"
+      eager
       max-width="290">
     <v-card>
       <v-card-title
@@ -30,8 +31,15 @@
     computed: {
       ...mapState(['dialog']),
 
-      show() {
-        return this.dialog.type === 'alert'
+      show: {
+        get() {
+          return this.dialog.type === 'alert'
+        },
+        set(visible) {
+          if (!visible) {
+            this.hideDialog()
+          }
+        },
       },
     },
 

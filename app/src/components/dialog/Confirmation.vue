@@ -36,8 +36,15 @@
     computed: {
       ...mapState(['dialog']),
 
-      show() {
-        return this.dialog.type === 'confirmation'
+      show: {
+        get() {
+          return this.dialog.type === 'confirmation'
+        },
+        set(visible) {
+          if (!visible) {
+            this.hideDialog()
+          }
+        },
       },
     },
 

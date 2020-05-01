@@ -21,7 +21,6 @@ export default new Vuex.Store({
     drawer: null,
     user: '',
     token: false,
-    publicPages: ['/login'],
     dialog: {},
   },
   mutations: {
@@ -41,10 +40,6 @@ export default new Vuex.Store({
       state.user = payload
     },
 
-    SET_PUBLIC_PAGES(state, payload) {
-      state.publicPages = payload
-    },
-
     SET_DIALOG(state, payload) {
       state.dialog = payload
     },
@@ -56,10 +51,6 @@ export default new Vuex.Store({
 
     setUser({ commit }, payload) {
       commit('SET_USER', payload)
-    },
-
-    setPublicPages({ commit }, payload) {
-      commit('SET_PUBLIC_PAGES', payload)
     },
 
     openDialogConfirmation({ commit }, payload) {

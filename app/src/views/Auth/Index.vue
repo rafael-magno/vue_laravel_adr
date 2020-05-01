@@ -16,5 +16,7 @@
         </v-row>
       </v-container>
     </v-content>
+    <dialog-confirmation />
+    <dialog-alert />
   </v-app>
 </template>

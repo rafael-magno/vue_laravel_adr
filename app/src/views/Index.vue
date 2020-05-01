@@ -3,6 +3,8 @@
     <core-app-bar />
     <core-drawer />
     <core-view />
+    <dialog-confirmation />
+    <dialog-alert />
   </v-app>
 </template>
 
