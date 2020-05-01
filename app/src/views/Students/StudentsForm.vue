@@ -9,7 +9,9 @@
       :validation-messages="validationMessages">
     <template #default="{ form, serverMessages, showErrors }">
       <v-row>
-        <v-col md="4">
+        <v-col
+            cols="12"
+            md="4">
           <v-text-field
               v-model="form.name"
               :error-messages="showErrors('name')"
@@ -17,7 +19,9 @@
               label="Name"
               @keydown="delete serverMessages.name" />
         </v-col>
-        <v-col md="4">
+        <v-col
+            cols="12"
+            md="4">
           <v-select
               v-model="form.shift_id"
               :error-messages="showErrors('shift_id')"
@@ -28,7 +32,7 @@
               label="Shift"
               @change="delete serverMessages.shift_id" />
         </v-col>
-        <v-col>
+        <v-col cols="12">
           <p class="mb-0">
             Subjects
           </p>
@@ -42,16 +46,10 @@
               hide-details
               @click="delete serverMessages.subjects_id" />
           <p
-              class="caption mt-1 mb-0"
-              v-text="showErrors('subjects_id')" />
-        </v-col>
-        <v-col md="4">
-          <v-text-field
-              v-model="form.name"
-              :error-messages="showErrors('name')"
-              class="purple-input"
-              label="Name"
-              @keydown="delete serverMessages.name" />
+              v-for="(error, indexError) in showErrors('subjects_id')"
+              :key="indexError"
+              class="caption mt-1 mb-0 red--text"
+              v-text="error" />
         </v-col>
       </v-row>
     </template>

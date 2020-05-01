@@ -4,6 +4,7 @@ namespace App\Modules\Student\Repositories;
 
 use App\Modules\Student\Models\Student;
 use App\Repository;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class StudentRepository extends Repository
@@ -13,7 +14,7 @@ class StudentRepository extends Repository
         $this->model = $student;
     }
 
-    public function create(array $data)
+    public function create(array $data): Model
     {
         DB::beginTransaction();
 
@@ -25,7 +26,7 @@ class StudentRepository extends Repository
         return $student;
     }
 
-    public function update(array $data, $id)
+    public function update(array $data, $id): Model
     {
         DB::beginTransaction();
 

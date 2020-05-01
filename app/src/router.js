@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
-import axios from '@/plugins/axios'
+import authRepository from '@/repositories/AuthRepository'
 
 Vue.use(Router)
 
@@ -13,7 +13,10 @@ export default new Router({
       path: '/auth/',
       beforeEnter: (to, from, next) => {
         store.dispatch('setToken', false)
-        axios.delete('/auth').then(() => next())
+        authRepository.logout()
+          .then(() => {
+            next()
+          })
       },
       component: () => import('@/views/Auth/Index'),
       children: [
@@ -47,9 +50,9 @@ export default new Router({
       },
       children: [
         {
-          name: 'Dashboard',
+          name: 'Welcome',
           path: '',
-          component: () => import('@/views/dashboard/Dashboard'),
+          component: () => import('@/views/dashboard/Welcome'),
         },
         {
           name: 'shifts',
