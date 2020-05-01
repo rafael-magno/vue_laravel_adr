@@ -1,7 +1,6 @@
 <template>
   <v-dialog
       v-model="show"
-      eager
       max-width="290">
     <v-card>
       <v-card-title
