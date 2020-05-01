@@ -3,7 +3,7 @@
       entity="student"
       :repository="studentsRepository"
       url-not-found="/students"
-      url-success="/students/new"
+      url-success="/students"
       url-back="/students"
       :validations="validations"
       :validation-messages="validationMessages">

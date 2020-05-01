@@ -4,7 +4,7 @@
       entity="subject"
       :repository="subjectsRepository"
       url-not-found="/subjects"
-      url-success="/subjects/new"
+      url-success="/subjects"
       url-back="/subjects"
       :validations="validations">
     <template #default="{ form, serverMessages, showErrors }">

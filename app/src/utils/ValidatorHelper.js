@@ -17,12 +17,13 @@ class ValidatorHelper {
   }
 
   showErrors(vue, field) {
-    var messages = []
+    const messages = []
+
     if (!vue.$v.form[field].$dirty) {
       return messages
     }
 
-    if (vue.serverMessages[field]) {
+    if (vue.serverMessages && vue.serverMessages[field]) {
       return vue.serverMessages[field]
     }
 

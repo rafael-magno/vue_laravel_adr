@@ -4,7 +4,7 @@
       entity="shift"
       :repository="shiftsRepository"
       url-not-found="/shifts"
-      url-success="/shifts/new"
+      url-success="/shifts"
       url-back="/shifts"
       :validations="validations">
     <template #default="{ form, serverMessages, showErrors }">

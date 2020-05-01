@@ -5,11 +5,7 @@ const $axios = axios.create({
   baseURL: process.env.VUE_APP_API_URL || null,
   withCredentials: true,
 })
-$axios.interceptors.request.use((config) => {
-  console.log(config)
 
-  return config
-}, error => Promise.reject(error))
 $axios.interceptors.response.use(
   (response) => response,
   (error) => {
