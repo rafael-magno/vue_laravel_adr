@@ -1,9 +1,9 @@
-import Repository from './Repository';
+import Repository from './Repository'
 
 class SubjectsRepository extends Repository {
-  constructor () {
+  constructor() {
     super('/subjects')
   }
 }
 
-export default new SubjectsRepository();
+export default new SubjectsRepository()

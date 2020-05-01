@@ -2,48 +2,42 @@
 
 namespace App;
 
-use App\Exceptions\HttpResponseException;
-use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
+use App\Exceptions\ItemNotFoundException;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 abstract class Repository
 {
-    /**
-     * @var \Illuminate\Database\Eloquent\Model
-     */
     protected $model;
 
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
-
-    public function find($id)
+    public function find(int $id): Model
     {
         return $this->model->find($id);
     }
 
-    public function findOrFail($id)
+    public function findOrFail(int $id): Model
     {
         $model = $this->model->find($id);
+
         if (!$model) {
-            abort(404);
+            throw new ItemNotFoundException('Not found.');
         }
 
         return $model;
     }
 
-    public function findAll()
+    public function findAll(): Collection
     {
         return $this->model->all();
     }
 
-    public function create(array $data)
+    public function create(array $data): Model
     {
         return $this->model->create($data);
     }
 
-    public function update(array $data, $id)
+    public function update(array $data, int $id): Model
     {
         $model = $this->findOrFail($id);
         $model->update($data);
@@ -51,64 +45,53 @@ abstract class Repository
         return $model;
     }
 
-    public function firstOrCreate(array $data)
+    public function firstOrCreate(array $data): Model
     {
         return $this->model->firstOrCreate($data);
     }
 
-    public function delete($id)
+    public function delete(int $id): Model
     {
-        $model = $this->model->find($id);
-        if (!$model) {
-            abort(404);
-        }
-
-        try {
-            $model->delete();
-        } catch (QueryException $queryException) {
-            throw new HttpResponseException('["The record is linked to another item"]', 422, $queryException);
-        }
+        $model = $this->model->findOrFail($id);
+        $model->delete();
 
         return $model;
     }
 
-    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
-    {
+    public function findBy(
+        array $criteria,
+        array $orderBy = [],
+        int $limit = 0,
+        int $offset = 0
+    ): Collection {
         $model = $this->model;
 
-        if (1 == count($criteria)) {
-            foreach ($criteria as $c) {
-                $model = $model->where($c[0], $c[1], $c[2]);
-            }
-        } elseif (count($criteria > 1)) {
-            $model = $model->where($criteria[0], $criteria[1], $criteria[2]);
+        foreach ($criteria as $field => $value) {
+            $operator = is_array($value) ? $value[0] : '=';
+            $fieldValue = is_array($value) ? $value[1] : $value;
+            $model = $model->where($field, $operator, $fieldValue);
         }
 
-        if (1 == count($orderBy)) {
-            foreach ($orderBy as $order) {
-                $model = $model->orderBy($order[0], $order[1]);
-            }
-        } elseif (count($orderBy > 1)) {
-            $model = $model->orderBy($orderBy[0], $orderBy[1]);
+        foreach ($orderBy as $field) {
+            $fieldName = is_array($field) ? $field[0] : $field;
+            $direction = is_array($field) ? $field[1] : 'asc';
+            $model = $model->orderBy($fieldName, $direction);
         }
 
-        if (count($limit)) {
-            $model = $model->take((int) $limit);
-        }
-
-        if (count($offset)) {
-            $model = $model->skip((int) $offset);
+        if ($limit) {
+            $model = $model->take($limit);
+            $model = $model->skip($offset);
         }
 
         return $model->get();
     }
 
-    public function findOneBy(array $criteria)
+    public function findOneBy(array $criteria): ?Model
     {
         return $this->findBy($criteria)->first();
     }
 
-    public function paginate($perPage = null)
+    public function paginate(int $perPage = 0): LengthAwarePaginator
     {
         $perPage = $perPage ?? $_GET['perPage'] ?? env('PER_PAGE_DEFAULT');
 

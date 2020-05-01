@@ -1,18 +1,32 @@
-import axios from '@/plugins/axios';
+import axios from '@/plugins/axios'
 
 class Repository {
-  constructor (url) {
-    this.axios = axios;
-    this.url = url;
+  constructor(url) {
+    this.axios = axios
+    this.url = url
   }
 
-  getAll(page, perPage) {
-    let url = this.url + '?page=' + page + '&perPage=' + perPage
-    return this.axios.get(url)
+  async getAll(page = 1, perPage = 1000) {
+    const url = this.url + '?page=' + page + '&perPage=' + perPage
+    const response = await this.axios.get(url)
+    const responseData = response.data
+
+    if (typeof this.dataFormat === 'function') {
+      responseData.data = responseData.data.map(element => this.dataFormat(element))
+    }
+
+    return responseData
   }
 
-  getById(id) {
-    return this.axios.get(this.url + '/' + id)
+  async getById(id) {
+    const response = await this.axios.get(this.url + '/' + id)
+    let responseData = response.data
+
+    if (typeof this.dataFormat === 'function') {
+      responseData = this.dataFormat(responseData)
+    }
+
+    return responseData
   }
 
   delete(id) {
@@ -21,9 +35,9 @@ class Repository {
 
   save(data, id = 0) {
     if (id) {
-      return this.update(data, id);    
+      return this.update(data, id)
     } else {
-      return this.insert(data);
+      return this.insert(data)
     }
   }
 
@@ -36,4 +50,4 @@ class Repository {
   }
 }
 
-export default Repository;
+export default Repository

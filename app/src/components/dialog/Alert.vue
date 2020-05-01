@@ -1,23 +1,21 @@
 <template>
   <v-dialog
-    v-model="show"
-    max-width="290"
-  >
+      v-model="show"
+      max-width="290">
     <v-card>
       <v-card-title
-        v-if="title"
-        class="headline"
-        v-html="title" />
+          v-if="dialog.title"
+          class="headline"
+          v-html="dialog.title" />
       <v-card-text
-        v-if="text"
-        v-html="text" />
+          v-if="dialog.text"
+          v-html="dialog.text" />
       <v-card-actions>
-        <v-spacer/>
+        <v-spacer />
         <v-btn
-          :color="color"
-          text
-          @click="$emit('ok'); $store.dispatch('hideDialog')"
-        >
+            :color="dialog.color"
+            text
+            @click="dialog.callback(); hideDialog()">
           Ok
         </v-btn>
       </v-card-actions>
@@ -26,28 +24,19 @@
 </template>
 
 <script>
-export default {
-  props: {
-    title: {
-      type: String,
-      default: ''
-    },
-    text: {
-      type: String,
-      default: ''
-    },
-    color: {
-      type: String,
-      default: ''
-    },
-    show: {
-      type: Boolean,
-      default: false
-    }
-  },
+  import { mapState, mapActions } from 'vuex'
 
-  methods: {
-    hide () {}
+  export default {
+    computed: {
+      ...mapState(['dialog']),
+
+      show() {
+        return this.dialog.type === 'alert'
+      },
+    },
+
+    methods: {
+      ...mapActions(['hideDialog']),
+    },
   }
-}
 </script>

@@ -4,11 +4,12 @@ namespace App\Modules\Student\Actions;
 
 use App\Action;
 use App\Modules\Student\Repositories\StudentRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CreateStudentAction extends Action
 {
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'required|unique:students,name',
@@ -20,8 +21,9 @@ class CreateStudentAction extends Action
     public function handle(
         StudentRepository $studentRepository,
         Request $request
-    ) {
-        $student = $studentRepository->create($request->all());
+    ): JsonResponse {
+        $data = $request->all();
+        $student = $studentRepository->create($data);
 
         return response()->json($student, 201);
     }

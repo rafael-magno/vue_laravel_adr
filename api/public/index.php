@@ -8,10 +8,24 @@
  */
 
 define('LARAVEL_START', microtime(true));
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: *");
 
+$envContent = file('../.env');
+$env = [];
+foreach ($envContent as $envLine) {
+    $envLine = trim($envLine);
+    if (!$envLine || strpos($envLine, '#') === 0) {
+        continue;
+    }
+    $envData = explode('=', $envLine);
+    $keyEnv = $envData[0];
+    unset($envData[0]);
+    $env[$keyEnv] = implode('=', $envData);
+}
+
+header("Access-Control-Allow-Origin: " . $env['CLIENT_APP_URL']);
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Headers: content-type");
+header("Access-Control-Allow-Methods: GET,POST,PUT,DELETE");
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader

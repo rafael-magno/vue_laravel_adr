@@ -1,30 +1,27 @@
 <template>
   <v-dialog
-    v-model="show"
-    max-width="290"
-  >
+      v-model="show"
+      max-width="290">
     <v-card>
       <v-card-title
-        v-if="title"
-        class="headline"
-        v-html="title" />
+          v-if="dialog.title"
+          class="headline"
+          v-html="dialog.title" />
       <v-card-text
-        v-if="text"
-        v-html="text" />
+          v-if="dialog.text"
+          v-html="dialog.text" />
       <v-card-actions>
-        <v-spacer/>
+        <v-spacer />
         <v-btn
-          color="green darken-1"
-          text
-          @click="$emit('yes'); $store.dispatch('hideDialog')"
-        >
+            color="green darken-1"
+            text
+            @click="dialog.callback(); hideDialog()">
           Yes
         </v-btn>
         <v-btn
-          color="red darken-1"
-          text
-          @click="$store.dispatch('hideDialog')"
-        >
+            color="red darken-1"
+            text
+            @click="hideDialog()">
           No
         </v-btn>
       </v-card-actions>
@@ -33,20 +30,19 @@
 </template>
 
 <script>
-export default {
-  props: {
-    title: {
-      type: String,
-      default: ''
+  import { mapState, mapActions } from 'vuex'
+
+  export default {
+    computed: {
+      ...mapState(['dialog']),
+
+      show() {
+        return this.dialog.type === 'confirmation'
+      },
     },
-    text: {
-      type: String,
-      default: ''
+
+    methods: {
+      ...mapActions(['hideDialog']),
     },
-    show: {
-      type: Boolean,
-      default: false
-    }
   }
-}
 </script>

@@ -4,6 +4,7 @@ namespace App;
 
 use App\Exceptions\HttpResponseException;
 use Lorisleiva\Actions\Action as BaseAction;
+use Illuminate\Http\Response;
 
 abstract class Action extends BaseAction
 {
@@ -12,9 +13,9 @@ abstract class Action extends BaseAction
         $this->validator = null;
 
         if (!$this->passesValidation()) {
-            $erros = $this->getValidationErrors();
+            $errors = $this->getValidationErrors();
 
-            throw new HttpResponseException($erros, 422);
+            throw new HttpResponseException($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         return $this;

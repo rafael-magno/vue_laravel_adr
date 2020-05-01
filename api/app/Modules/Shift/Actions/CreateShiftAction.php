@@ -4,11 +4,12 @@ namespace App\Modules\Shift\Actions;
 
 use App\Action;
 use App\Modules\Shift\Repositories\ShiftRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CreateShiftAction extends Action
 {
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'required|unique:shifts,name',
@@ -18,8 +19,9 @@ class CreateShiftAction extends Action
     public function handle(
         ShiftRepository $shiftRepository,
         Request $request
-    ) {
-        $shift = $shiftRepository->create($request->all());
+    ): JsonResponse {
+        $data = $request->all();
+        $shift = $shiftRepository->create($data);
 
         return response()->json($shift, 201);
     }

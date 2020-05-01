@@ -1,103 +1,95 @@
 <template>
-  <v-container
-    fill-height
-    fluid
-    grid-list-xl>
-    <v-layout
-      justify-center
-      wrap>
-      <v-flex
-        xs12
-        md8>
-        <material-card
-          :title="id ? 'Edit student' : 'New student'"
-          color="green">
-          <v-form @submit.prevent="save()">
-            <v-container py-0>
-              <v-layout wrap>
-                <v-flex
-                  xs12
-                  md4>
-                  <v-text-field
-                    v-model="form.name"
-                    :error-messages="showErrors('name')"
-                    class="purple-input"
-                    label="Name"
-                    @keydown="delete serverValidationMessages.name" />
-                </v-flex>
-                <v-flex
-                  xs12
-                  md4>
-                  <v-select
-                    v-model="form.shifts_id"
-                    :error-messages="showErrors('shifts_id')"
-                    :itens="shifts"
-                    class="purple-input"
-                    label="Shift"
-                    @change="delete serverValidationMessages.shifts_id" />
-                </v-flex>
-              </v-layout>
-              <v-layout wrap>
-                <v-flex
-                  xs6
-                  text-xs-left>
-                  <v-btn
-                    class="mx-0"
-                    color="grey"
-                    @click="$router.push('/students')">
-                    Back
-                  </v-btn>
-                </v-flex>
-                <v-flex
-                  xs6
-                  text-xs-right>
-                  <v-btn
-                    type="submit"
-                    class="mx-0 font-weight-light"
-                    color="success">
-                    Save
-                  </v-btn>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-form>
-        </material-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+  <base-form
+      entity="student"
+      :repository="studentsRepository"
+      url-not-found="/students"
+      url-success="/students/new"
+      url-back="/students"
+      :validations="validations"
+      :validation-messages="validationMessages">
+    <template #default="{ form, serverMessages, showErrors }">
+      <v-row>
+        <v-col md="4">
+          <v-text-field
+              v-model="form.name"
+              :error-messages="showErrors('name')"
+              class="purple-input"
+              label="Name"
+              @keydown="delete serverMessages.name" />
+        </v-col>
+        <v-col md="4">
+          <v-select
+              v-model="form.shift_id"
+              :error-messages="showErrors('shift_id')"
+              :items="shifts.data"
+              item-text="name"
+              item-value="id"
+              class="purple-input"
+              label="Shift"
+              @change="delete serverMessages.shift_id" />
+        </v-col>
+        <v-col>
+          <p class="mb-0">
+            Subjects
+          </p>
+          <v-checkbox
+              v-for="subject in subjects.data"
+              :key="subject.id"
+              v-model="form.subjects_id"
+              class="mt-0"
+              :label="subject.name"
+              :value="subject.id"
+              hide-details
+              @click="delete serverMessages.subjects_id" />
+          <p
+              class="caption mt-1 mb-0"
+              v-text="showErrors('subjects_id')" />
+        </v-col>
+        <v-col md="4">
+          <v-text-field
+              v-model="form.name"
+              :error-messages="showErrors('name')"
+              class="purple-input"
+              label="Name"
+              @keydown="delete serverMessages.name" />
+        </v-col>
+      </v-row>
+    </template>
+  </base-form>
 </template>
 
 <script>
-import studentsRepository from '@/repositories/StudentsRepository'
-import shiftsRepository from '@/repositories/ShiftsRepository'
-import { required } from 'vuelidate/lib/validators'
-import Form from '../Form'
+  import studentsRepository from '@/repositories/StudentsRepository'
+  import shiftsRepository from '@/repositories/ShiftsRepository'
+  import subjectsRepository from '@/repositories/SubjectsRepository'
+  import { required } from 'vuelidate/lib/validators'
 
-export default {
-  extends: Form,
-  data: () => ({
-    urlNotFound: '/students',
-    urlSuccess: '/students/new',
-    repository: studentsRepository,
-    shifts: []
-  }),
-
-  created() {
-    shiftsRepository.getAll()
-      .then(respose => this.shifts = respose.data.data)
-  },
-
-  validations () {
-    return {
-      form: {
+  export default {
+    data: () => ({
+      studentsRepository,
+      shifts: [],
+      subjects: [],
+      validations: {
         name: {
-          required
+          required,
         },
-        shifts_id: {
-          required
-        }
-      }
-    }
+        shift_id: {
+          required,
+        },
+        subjects_id: {
+          required,
+        },
+      },
+      validationMessages: {
+        subjects_id: {
+          required: 'Select at least one.',
+        },
+      },
+    }),
+
+    async created() {
+      this.shifts = await shiftsRepository.getAll()
+      this.subjects = await subjectsRepository.getAll()
+    },
   }
-}
 </script>

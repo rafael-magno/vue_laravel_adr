@@ -4,10 +4,11 @@ namespace App\Modules\Shift\Actions;
 
 use App\Action;
 use App\Modules\Shift\Repositories\ShiftRepository;
+use Illuminate\Http\JsonResponse;
 
 class ListShiftsAction extends Action
 {
-    public function handle(ShiftRepository $shiftRepository)
+    public function handle(ShiftRepository $shiftRepository): JsonResponse
     {
         $shifts = $shiftRepository->paginate();
 

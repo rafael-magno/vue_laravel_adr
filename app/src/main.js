@@ -1,30 +1,22 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
+import store from './store'
+import './plugins/base'
+import './plugins/chartist'
+import './plugins/vee-validate'
+import vuetify from './plugins/vuetify'
+import i18n from './i18n'
+import vuelidate from 'vuelidate'
 
-// Components
-import './components'
-
-// Plugins
-import './plugins'
-import { sync } from 'vuex-router-sync'
-
-// Application imports
-import App from './App'
-import router from '@/router'
-import store from '@/store'
-import Vuelidate from 'vuelidate'
-
-// Sync store with router
-sync(store, router)
+Vue.use(vuelidate)
 
 Vue.config.productionTip = false
 
-Vue.use(Vuelidate)
-
-/* eslint-disable no-new */
 new Vue({
   router,
   store,
-  render: h => h(App)
+  vuetify,
+  i18n,
+  render: h => h(App),
 }).$mount('#app')
