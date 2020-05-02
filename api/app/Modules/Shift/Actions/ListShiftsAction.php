@@ -4,6 +4,7 @@ namespace App\Modules\Shift\Actions;
 
 use App\Action;
 use App\Modules\Shift\Repositories\ShiftRepository;
+use App\Utils\Token;
 use Illuminate\Http\JsonResponse;
 
 class ListShiftsAction extends Action

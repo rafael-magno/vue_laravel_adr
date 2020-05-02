@@ -43,8 +43,8 @@ class Token
 
     public static function getUserId(): int
     {
-        $tokenPayload = session()->get('tokenPayload');
+        global $TOKEN_PAYLOAD;
 
-        return $tokenPayload['sub'];
+        return $TOKEN_PAYLOAD['sub'];
     }
 }
